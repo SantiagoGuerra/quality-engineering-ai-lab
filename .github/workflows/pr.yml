@@ -66,7 +66,7 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm qa:start
       - name: Smoke, accessibility, API scenarios and golden tests
-        run: pnpm test:e2e:smoke && pnpm test:a11y && pnpm test:api:hurl && pnpm test:visual
+        run: pnpm test:e2e:smoke && pnpm test:a11y && pnpm test:api:hurl && pnpm test:visual:linux
       - if: always()
         run: pnpm qa:report
       - if: always()

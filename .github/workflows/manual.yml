@@ -67,7 +67,7 @@ jobs:
             smoke) pnpm test:e2e:smoke ;;
             full) pnpm exec playwright test --project="${{ inputs.browser }}" ;;
             a11y) pnpm test:a11y ;;
-            visual) pnpm test:visual ;;
+            visual) pnpm test:visual:linux ;;
             security) pnpm test:security ;;
             performance) pnpm test:performance ;;
           esac

@@ -23,7 +23,7 @@ jobs:
       - run: pnpm qa:start
       - run: pnpm qa:check
       - run: pnpm test:integration && pnpm test:e2e:full
-      - run: pnpm test:visual && pnpm test:api:schemathesis && pnpm test:dast
+      - run: pnpm test:visual:linux && pnpm test:api:schemathesis && pnpm test:dast
       - if: always()
         run: pnpm qa:report
       - if: always()
