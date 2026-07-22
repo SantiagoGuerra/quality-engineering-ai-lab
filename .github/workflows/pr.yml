@@ -12,7 +12,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  QA_SEED: '20260721'
+  QA_SEED: default
+  FC_SEED: '20260721'
 
 jobs:
   static:
@@ -141,7 +142,7 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with: { node-version: 20.19.4, cache: pnpm }
       - run: pnpm install --frozen-lockfile
-      - name: Update the single human-readable PR comment
+      - name: Render or update the single human-readable PR comment
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
@@ -149,7 +150,12 @@ jobs:
           RUNTIME_RESULT: ${{ needs.runtime.result }}
           SECURITY_RESULT: ${{ needs.security.result }}
           DEPENDENCY_RESULT: ${{ needs.dependency-review.result }}
-        run: pnpm github:comment:publish
+        run: |
+          if [[ "$GITHUB_ACTOR" == "dependabot[bot]" ]]; then
+            pnpm github:comment:dry-run
+          else
+            pnpm github:comment:publish
+          fi
       - if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
