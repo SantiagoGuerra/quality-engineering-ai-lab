@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import cors from '@fastify/cors';
 import jwt from '@fastify/jwt';
+import rateLimit from '@fastify/rate-limit';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import { CandidateInputSchema, EvaluationInputSchema, InterviewInputSchema, InterviewStatusSchema, LoginSchema, PaginationSchema, ProjectInputSchema, averageScore, can, type Action, type ApiErrorBody } from '@talent-lab/contracts';
@@ -25,12 +26,29 @@ function errorBody(code: string, message: string, requestId?: string, details?: 
   return { error: { code, message, ...(requestId ? { requestId } : {}), ...(details === undefined ? {} : { details }) } };
 }
 
+function fixtureDelay(value: unknown): number {
+  switch (String(value ?? '500')) {
+    case '0': return 0;
+    case '50': return 50;
+    case '100': return 100;
+    case '1000': return 1_000;
+    case '2000': return 2_000;
+    default: return 500;
+  }
+}
+
 export async function buildApp(options: BuildOptions = {}): Promise<FastifyInstance> {
   const app = Fastify({ logger: options.logger ?? false, genReqId: () => randomUUID() });
   const repository = options.repository ?? new PgTalentRepository(process.env.DATABASE_URL ?? 'postgres://talent:talent_local@localhost:54329/talent_lab');
   const mailer = options.mailer ?? new RecordingMailer();
 
   await app.register(cors, { origin: process.env.WEB_ORIGIN ?? 'http://localhost:4173' });
+  await app.register(rateLimit, {
+    global: true,
+    max: 500,
+    timeWindow: '1 minute',
+    allowList: (request) => request.url === '/health' || request.url === '/metrics',
+  });
   await app.register(jwt, { secret: options.jwtSecret ?? process.env.JWT_SECRET ?? 'local-only-change-me-32-characters-minimum' });
   await app.register(swagger, {
     openapi: {
@@ -54,6 +72,7 @@ export async function buildApp(options: BuildOptions = {}): Promise<FastifyInsta
     if (error instanceof NotFoundError) return reply.status(404).send(errorBody('NOT_FOUND', error.message, request.id));
     if (error instanceof HttpError) return reply.status(error.statusCode).send(errorBody(error.code, error.message, request.id));
     if (typeof error === 'object' && error !== null && 'statusCode' in error && error.statusCode === 401) return reply.status(401).send(errorBody('UNAUTHENTICATED', 'Session is missing or expired', request.id));
+    if (typeof error === 'object' && error !== null && 'statusCode' in error && error.statusCode === 429) return reply.status(429).send(errorBody('RATE_LIMITED', 'Too many requests; retry later', request.id));
     if (typeof error === 'object' && error !== null && 'statusCode' in error && error.statusCode === 400) return reply.status(400).send(errorBody('VALIDATION_ERROR', 'Request validation failed', request.id));
     request.log.error({ err: error }, 'unhandled request error');
     return reply.status(500).send(errorBody('INTERNAL_ERROR', 'Unexpected server error', request.id));
@@ -65,7 +84,7 @@ export async function buildApp(options: BuildOptions = {}): Promise<FastifyInsta
   app.get('/metrics', async (_request, reply) => reply.type('text/plain').send('talent_api_up 1\n'));
   app.get('/openapi.json', async () => app.swagger());
 
-  app.post('/auth/login', { schema: { tags: ['auth'], body: { type: 'object', required: ['email', 'password'], properties: { email: { type: 'string', format: 'email' }, password: { type: 'string', minLength: 8 } } } } }, async (request) => {
+  app.post('/auth/login', { config: { rateLimit: { max: 10, timeWindow: '1 minute' } }, schema: { tags: ['auth'], body: { type: 'object', required: ['email', 'password'], properties: { email: { type: 'string', format: 'email' }, password: { type: 'string', minLength: 8 } } } } }, async (request) => {
     const credentials = LoginSchema.parse(request.body);
     const user = await repository.getUserByEmail(credentials.email);
     if (!user || !verifyPassword(credentials.password, user.passwordHash)) throw new HttpError(401, 'INVALID_CREDENTIALS', 'Email or password is incorrect');
@@ -141,7 +160,7 @@ export async function buildApp(options: BuildOptions = {}): Promise<FastifyInsta
 
   if (options.enableTestFixtures ?? process.env.ENABLE_TEST_FIXTURES === 'true') {
     app.get('/__fixtures__/slow', { schema: { hide: true } }, async (request) => {
-      const delay = Math.min(2_000, Number((request.query as { ms?: string }).ms ?? 500));
+      const delay = fixtureDelay((request.query as { ms?: string }).ms);
       await new Promise((resolve) => setTimeout(resolve, delay)); return { delayedMs: delay };
     });
     app.get('/__fixtures__/partial', { schema: { hide: true } }, async () => ({ status: 'partial', delivered: ['candidate'], failed: ['email'] }));
