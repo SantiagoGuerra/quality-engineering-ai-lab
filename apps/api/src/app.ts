@@ -15,6 +15,7 @@ interface BuildOptions {
   mailer?: InvitationMailer;
   jwtSecret?: string;
   enableTestFixtures?: boolean;
+  loginRateLimitMax?: number;
   logger?: boolean;
 }
 
@@ -84,7 +85,7 @@ export async function buildApp(options: BuildOptions = {}): Promise<FastifyInsta
   app.get('/metrics', async (_request, reply) => reply.type('text/plain').send('talent_api_up 1\n'));
   app.get('/openapi.json', async () => app.swagger());
 
-  app.post('/auth/login', { config: { rateLimit: { max: 10, timeWindow: '1 minute' } }, schema: { tags: ['auth'], body: { type: 'object', required: ['email', 'password'], properties: { email: { type: 'string', format: 'email' }, password: { type: 'string', minLength: 8 } } } } }, async (request) => {
+  app.post('/auth/login', { config: { rateLimit: { max: options.loginRateLimitMax ?? 10, timeWindow: '1 minute' } }, schema: { tags: ['auth'], body: { type: 'object', required: ['email', 'password'], properties: { email: { type: 'string', format: 'email' }, password: { type: 'string', minLength: 8 } } } } }, async (request) => {
     const credentials = LoginSchema.parse(request.body);
     const user = await repository.getUserByEmail(credentials.email);
     if (!user || !verifyPassword(credentials.password, user.passwordHash)) throw new HttpError(401, 'INVALID_CREDENTIALS', 'Email or password is incorrect');

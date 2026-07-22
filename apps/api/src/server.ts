@@ -6,11 +6,13 @@ import { SmtpInvitationMailer } from './mailer.js';
 const port = Number(process.env.API_PORT ?? 3001);
 const databaseUrl = process.env.DATABASE_URL ?? 'postgres://talent:talent_local@localhost:54329/talent_lab';
 const repository = new PgTalentRepository(databaseUrl);
+const enableTestFixtures = process.env.ENABLE_TEST_FIXTURES === 'true';
 await migrate(repository.pool);
 const app = await buildApp({
   repository,
   mailer: new SmtpInvitationMailer(process.env.SMTP_HOST ?? 'localhost', Number(process.env.SMTP_PORT ?? 10259)),
-  enableTestFixtures: process.env.ENABLE_TEST_FIXTURES === 'true',
+  enableTestFixtures,
+  ...(enableTestFixtures ? { loginRateLimitMax: 100 } : {}),
   logger: true,
 });
 
