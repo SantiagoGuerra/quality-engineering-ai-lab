@@ -91,7 +91,7 @@
     "fast-check": "4.4.0",
     "fastify": "5.10.0",
     "jest-axe": "10.0.0",
-    "jsdom": "26.1.0",
+    "jsdom": "29.1.1",
     "pa11y-ci": "4.1.1",
     "prettier": "3.6.2",
     "react": "19.2.8",
