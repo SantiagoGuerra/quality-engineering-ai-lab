@@ -4,6 +4,8 @@ on:
     branches: [main]
 permissions:
   contents: read
+env:
+  PLAYWRIGHT_EXTERNAL_SERVER: 'true'
 jobs:
   expanded:
     runs-on: ubuntu-24.04
