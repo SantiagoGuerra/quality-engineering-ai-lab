@@ -5,6 +5,8 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+env:
+  PLAYWRIGHT_EXTERNAL_SERVER: 'true'
 jobs:
   deep:
     runs-on: ubuntu-24.04
