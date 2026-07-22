@@ -27,6 +27,10 @@ describe('generative domain invariants', () => {
     fc.assert(fc.property(fc.array(fc.double({ min: 0, max: 5, noNaN: true }), { minLength: 1, maxLength: 30 }), (scores) => { const result = averageScore(scores)!; expect(result).toBeGreaterThanOrEqual(Math.min(...scores) - 0.01); expect(result).toBeLessThanOrEqual(Math.max(...scores) + 0.01); }), { numRuns: runs });
   });
 
+  it('average score is unchanged when every observation is replayed', () => {
+    fc.assert(fc.property(fc.array(fc.double({ min: 0, max: 5, noNaN: true }), { minLength: 1, maxLength: 30 }), (scores) => { expect(averageScore(scores.flatMap((score) => [score, score]))).toBe(averageScore(scores)); }), { numRuns: runs });
+  });
+
   it('permission answers are total and boolean for every role/action combination', () => {
     const actions: Action[] = ['candidate:read', 'candidate:write', 'project:write', 'interview:write', 'evaluation:write', 'result:read', 'audit:read'];
     fc.assert(fc.property(fc.constantFrom(...roles), fc.constantFrom(...actions), (role, action) => { expect(typeof can(role, action)).toBe('boolean'); }), { numRuns: runs });
