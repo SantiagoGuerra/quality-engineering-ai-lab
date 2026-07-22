@@ -1,0 +1,15 @@
+packages:
+  - apps/*
+  - packages/*
+
+onlyBuiltDependencies:
+  - esbuild
+
+# None of these optional/postinstall scripts are required by the local gates.
+# Keeping the allowlist to esbuild reduces install-time supply-chain execution.
+ignoredBuiltDependencies:
+  - cpu-features
+  - msw
+  - protobufjs
+  - puppeteer
+  - ssh2

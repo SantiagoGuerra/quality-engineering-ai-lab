@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["entries"],
+  "properties": {
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["test-id", "owner", "reason", "introduced-at", "expires-at", "linked-issue"],
+        "properties": {
+          "test-id": { "type": "string", "minLength": 1 },
+          "owner": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 10 },
+          "introduced-at": { "type": "string", "format": "date" },
+          "expires-at": { "type": "string", "format": "date" },
+          "linked-issue": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

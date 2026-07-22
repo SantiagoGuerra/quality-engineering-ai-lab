@@ -1,0 +1,14 @@
+* @talent-lab/maintainers
+/apps/api/ @talent-lab/backend @talent-lab/security
+/apps/web/ @talent-lab/frontend @talent-lab/accessibility
+/packages/ui/ @talent-lab/design-system @talent-lab/accessibility
+/packages/database/ @talent-lab/backend @talent-lab/test-data
+/tests/unit/ @talent-lab/developers
+/tests/components/ @talent-lab/frontend
+/tests/integration/ @talent-lab/backend
+/tests/e2e/ @talent-lab/quality
+/tests/flaky/ @talent-lab/quality
+/tests/security/ @talent-lab/security
+/.github/ @talent-lab/devsecops
+/scripts/jira/ @talent-lab/quality
+/tests/e2e/visual.spec.ts-snapshots/ @talent-lab/quality @talent-lab/design-system

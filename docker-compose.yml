@@ -1,0 +1,95 @@
+name: ${COMPOSE_PROJECT_NAME:-talent-lab}
+
+services:
+  postgres:
+    image: postgres:16.9-alpine3.22
+    environment:
+      POSTGRES_DB: talent_lab
+      POSTGRES_USER: talent
+      POSTGRES_PASSWORD: talent_local
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-54329}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U talent -d talent_lab"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    networks: [talent-lab]
+
+  mailpit:
+    image: axllent/mailpit:v1.27.1
+    environment:
+      MP_MAX_MESSAGES: 200
+      MP_SMTP_AUTH_ACCEPT_ANY: "1"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "1"
+    ports:
+      - "127.0.0.1:${MAILPIT_SMTP_PORT:-10259}:1025"
+      - "127.0.0.1:${MAILPIT_UI_PORT:-18025}:8025"
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    networks: [talent-lab]
+
+  toxiproxy:
+    image: ghcr.io/shopify/toxiproxy:2.12.0
+    ports:
+      - "127.0.0.1:${TOXIPROXY_PORT:-18474}:8474"
+    healthcheck:
+      test: ["CMD", "/toxiproxy", "-version"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks: [talent-lab]
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    environment:
+      NODE_ENV: production
+      API_PORT: 3001
+      DATABASE_URL: postgres://talent:talent_local@postgres:5432/talent_lab
+      JWT_SECRET: local-only-change-me-32-characters-minimum
+      WEB_ORIGIN: http://localhost:${WEB_PORT:-4173}
+      API_BASE_URL: http://localhost:${API_PORT:-3001}
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      ENABLE_TEST_FIXTURES: "true"
+    ports:
+      - "127.0.0.1:${API_PORT:-3001}:3001"
+    depends_on:
+      postgres: { condition: service_healthy }
+      mailpit: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3001/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+    networks: [talent-lab]
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - "127.0.0.1:${WEB_PORT:-4173}:8080"
+    depends_on:
+      api: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    networks: [talent-lab]
+
+networks:
+  talent-lab:
+    driver: bridge
+
+volumes:
+  postgres-data:

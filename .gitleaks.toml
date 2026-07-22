@@ -1,0 +1,13 @@
+title = "Talent Lab Gitleaks policy"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Synthetic secret fixtures are isolated and scanned only by the controlled demo"
+paths = ['''tests/security/fixtures/''', '''artifacts/demos/''', '''reports/generated/''', '''artifacts/auth/''', '''storybook-static/''']
+
+[[allowlists]]
+description = "Known local-only non-secret examples"
+regexTarget = "match"
+regexes = ['''local-only-change-me-32-characters-minimum''', '''talent_local''']

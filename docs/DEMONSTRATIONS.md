@@ -1,0 +1,33 @@
+# Demostraciones controladas
+
+Todas las fallas deliberadas se ejecutaron en fixtures o cambios temporales, se copiaron como evidencia y luego se restauraron. Ninguna assertion, baseline o vulnerabilidad se aceptó automáticamente.
+
+| # | Demostración | Resultado observado | Evidencia / estado final |
+|---:|---|---|---|
+| 1 | Unit test falla y se corrige | expectativa temporal `averageScore([0]) === 1` falló; se restauró `0` | `reports/generated/demos/unit/`; unit final verde |
+| 2 | Componente | estados loading/disabled, dialog, tabs y paginación con teclado pasan | `tests/components/ui.test.tsx`, reportes Vitest |
+| 3 | Property encuentra caso | fast-check seed `20260721` redujo a `"!a.a@a.aa"` una suposición demasiado fuerte sobre emails | `reports/generated/demos/property/`; property temporal retirada, 7/7 verde |
+| 4 | Mutación revela prueba débil | versión débil: 44.44%, 5 supervivientes; versión reforzada: 100%, 9 muertos | `reports/generated/demos/mutation/{weak,strong}/` |
+| 5 | E2E exitoso | suite ampliada 55/55 cross-browser | Playwright HTML/JUnit/JSON |
+| 6 | E2E fallido | test generado falló primero por locator ambiguo y luego por ruta API; revisión humana corrigió ambos | screenshot, video, trace y contexto en `reports/generated/demos/e2e-failure/` |
+| 7 | Violación a11y | fixture aislada detectó `button-name` y input sin label | `reports/generated/axe/intentional-fixture.json` |
+| 8 | Corrección a11y | producto: axe 0; Pa11y 0 después de corregir autocomplete | reportes Playwright/Pa11y |
+| 9 | Diferencia visual | variante controlada produjo 12,938 píxeles, 2% de diferencia | `reports/generated/demos/visual/controlled-diff.png` |
+| 10 | Baseline revisado | baseline inspeccionado y actualizado con comando explícito; 3/3 final | `reviewed-baseline.png` + snapshots versionados |
+| 11 | Hurl | archivo declarativo ejecutó 9 requests | `reports/generated/hurl/index.html` |
+| 12 | Schemathesis | 270 casos; descubrió un 500 de validación y confirmó la corrección | JUnit timestamped en `reports/generated/schemathesis/` |
+| 13 | PostgreSQL real | inserción, consulta, persistencia y cleanup en contenedor | JUnit/JSON de integración |
+| 14 | Falla de red | Toxiproxy inyectó latencia/corte y validó recuperación acotada | JUnit/JSON de resiliencia |
+| 15 | Secreto falso | Gitleaks detectó exactamente una clave inerte de alta entropía | `security/demos/gitleaks-intentional.json` |
+| 16 | Hallazgo SAST | regla propia Semgrep detectó `eval` en fixture aislada | `security/demos/semgrep-intentional.json` |
+| 17 | SBOM | Syft generó CycloneDX y SPDX | `reports/generated/sbom/` |
+| 18 | Dependencia vulnerable | Grype detectó High transitivo en `tmp`; override corrigió High. Hallazgos Medium sin código de producción se triagean | `security/grype.json` + lockfile |
+| 19 | ZAP Baseline | 0 FAIL, 65 PASS, 2 WARN informativos después de endurecer headers | `reports/generated/zap/` |
+| 20 | k6 | 5 checks, 0% error, p95 1.5 ms, thresholds verdes | `k6/smoke-summary.json` |
+| 21 | Jira dry-run | ADF con marcador, commit/rama/seed/estado, sin red | `jira/dry-run.json` |
+| 22 | Jira idempotente | unit test localiza marcador y usa PUT sobre el comentario existente, no crea spam | `tests/unit/jira.test.ts` |
+| 23 | Plan por agente | planner real produjo plan del candidato idempotente | `artifacts/demos/agents/idempotent-candidate-plan.md` |
+| 24 | Test por agente | generator real produjo borrador; revisión humana dejó test ejecutable y verde | `generated-test-raw.md`, `tests/e2e/agent-generated.spec.ts` |
+| 25 | Reparación propuesta | healer real emitió propuesta read-only; no modificó assertions ni hizo merge | `artifacts/demos/agents/healer-proposal.md` |
+
+Los artifacts bajo `reports/generated` son efímeros y no se versionan para evitar repositorios enormes; CI los publica con retención. Los tres documentos de agentes se versionan porque contienen el rastro revisable, sin secretos ni datos reales.

@@ -1,0 +1,21 @@
+rules:
+  - id: talent-lab-no-dynamic-eval
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: Dynamic eval can execute attacker-controlled code; use a parser or an explicit dispatcher.
+    metadata:
+      category: security
+      cwe: CWE-95
+      confidence: HIGH
+      technology: [typescript]
+    pattern: eval(...)
+  - id: talent-lab-no-raw-error-response
+    languages: [typescript]
+    severity: WARNING
+    message: Do not return raw exception messages to clients; map to a stable redacted error contract.
+    metadata:
+      category: security
+      cwe: CWE-209
+      confidence: MEDIUM
+    patterns:
+      - pattern: $REPLY.send($ERROR.message)

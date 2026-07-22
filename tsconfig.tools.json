@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": true,
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@talent-lab/contracts": ["packages/contracts/src/index.ts"],
+      "@talent-lab/database": ["packages/database/src/index.ts"],
+      "@talent-lab/testing": ["packages/testing/src/index.ts"],
+      "@talent-lab/ui": ["packages/ui/src/index.ts"]
+    }
+  },
+  "include": ["scripts/**/*.ts", "tests/**/*.ts", "*.config.ts", "apps/api/src/types.d.ts"]
+}

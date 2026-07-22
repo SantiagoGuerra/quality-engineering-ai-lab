@@ -1,0 +1,17 @@
+.git
+.github
+.env
+.env.*
+!.env.example
+node_modules
+**/node_modules
+reports
+test-results
+playwright-report
+storybook-static
+coverage
+.turbo
+**/.turbo
+artifacts/runtime
+artifacts/auth
+*.log

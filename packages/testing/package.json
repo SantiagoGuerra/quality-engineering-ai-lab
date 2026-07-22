@@ -1,0 +1,1 @@
+{"name":"@talent-lab/testing","version":"1.0.0","private":true,"type":"module","exports":{".":"./src/index.ts"},"scripts":{"lint":"eslint src","typecheck":"tsc -p tsconfig.json --noEmit","build":"tsc -p tsconfig.json"},"dependencies":{"@talent-lab/contracts":"workspace:*","msw":"2.15.0"},"devDependencies":{"typescript":"5.9.3"}}
