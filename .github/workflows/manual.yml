@@ -78,7 +78,7 @@ jobs:
         with:
           {
             name: manual-quality-evidence,
-            path: "reports/**\nplaywright-report/**\ntest-results/**",
+            path: "reports/**\nplaywright-report/**\ntest-results/**\ntest-results-linux/**",
             if-no-files-found: warn,
             retention-days: 14,
           }
