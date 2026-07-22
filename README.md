@@ -1,6 +1,12 @@
 # Talent Lab QE
 
+[![Main expanded quality](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/actions/workflows/main.yml/badge.svg)](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/actions/workflows/main.yml)
+[![CodeQL](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/actions/workflows/codeql.yml/badge.svg)](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/actions/workflows/scorecard.yml/badge.svg)](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/actions/workflows/scorecard.yml)
+
 Laboratorio integral, local y reproducible de Quality Engineering sobre una plataforma de reclutamiento. Incluye React/Vite, Fastify, PostgreSQL, Mailpit y Toxiproxy; pruebas unitarias, componentes, API, integración, propiedades, mutación, E2E, visuales, accesibilidad, seguridad y rendimiento; evidencia unificada, Jira dry-run y guardrails para agentes.
+
+Proyecto educativo publicado bajo licencia MIT. Los datos, cuentas y escenarios son completamente sintéticos.
 
 ## Arranque en cuatro comandos
 
@@ -36,6 +42,8 @@ Seeds: `default`, `empty-state`, `candidate-creation`, `candidate-duplicate`, `p
 - `.github/workflows`: gates PR, main, nightly y manual contra `localhost`.
 
 Empieza por [TESTING.md](TESTING.md), [QA_WORKFLOW.md](QA_WORKFLOW.md) y [TROUBLESHOOTING.md](TROUBLESHOOTING.md). La arquitectura está en [docs/architecture/system.md](docs/architecture/system.md), los gates en [docs/quality/quality-gates.md](docs/quality/quality-gates.md), la evidencia real en [docs/VALIDATION.md](docs/VALIDATION.md), los 25 demos en [docs/DEMONSTRATIONS.md](docs/DEMONSTRATIONS.md) y las mejoras en [docs/BACKLOG.md](docs/BACKLOG.md).
+
+Para preparar una exposición, empieza por [la guía humana de QE e IA](docs/GUIA_HUMANA_QE_IA.md): explica roles, workflows, golden tests, screenshots, videos, trazas, límites de la IA y propone un guion de 30 minutos. Los PRs verdes y rojos de la demostración se catalogan en [docs/github/DEMO_PRS.md](docs/github/DEMO_PRS.md).
 
 ## Seguridad y privacidad
 

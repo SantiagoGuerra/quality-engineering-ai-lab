@@ -6,6 +6,7 @@ reports/generated/
 reports/index.html
 playwright-report/
 test-results/
+test-results-linux/
 blob-report/
 storybook-static/
 .env

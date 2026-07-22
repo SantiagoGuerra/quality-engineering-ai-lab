@@ -1,0 +1,27 @@
+# The official Playwright image is pinned by digest so Linux golden tests are reproducible.
+# checkov:skip=CKV_DOCKER_2:This ephemeral test runner exits after Playwright and exposes no service endpoint.
+FROM mcr.microsoft.com/playwright:v1.61.1-noble@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48
+
+ENV CI=true \
+    PLAYWRIGHT_EXTERNAL_SERVER=true \
+    COREPACK_HOME=/opt/corepack
+WORKDIR /workspace
+
+RUN mkdir -p "$COREPACK_HOME" \
+    && corepack enable \
+    && corepack prepare pnpm@10.34.5 --activate \
+    && chown -R pwuser:pwuser "$COREPACK_HOME" \
+    && chown pwuser:pwuser /workspace
+USER pwuser
+
+COPY --chown=pwuser:pwuser package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.base.json tsconfig.tools.json ./
+COPY --chown=pwuser:pwuser apps ./apps
+COPY --chown=pwuser:pwuser packages ./packages
+RUN pnpm install --frozen-lockfile
+
+COPY --chown=pwuser:pwuser tests ./tests
+COPY --chown=pwuser:pwuser scripts ./scripts
+COPY --chown=pwuser:pwuser config ./config
+COPY --chown=pwuser:pwuser playwright.config.ts vitest.shared.ts ./
+
+CMD ["pnpm", "exec", "playwright", "test", "--grep", "@visual", "--project=chromium-desktop"]
