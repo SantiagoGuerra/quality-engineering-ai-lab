@@ -120,7 +120,7 @@ export async function buildApp(options: BuildOptions = {}): Promise<FastifyInsta
     return updated;
   });
 
-  app.get('/projects', { preHandler: authenticate }, async () => repository.listProjects());
+  app.get('/projects', { config: { rateLimit: { max: 120, timeWindow: '1 minute' } }, preHandler: authenticate }, async () => repository.listProjects());
   app.post('/projects', { preHandler: authorize('project:write') }, async (request, reply) => {
     const input = ProjectInputSchema.parse(request.body);
     return reply.status(201).send(await repository.createProject({ name: input.name, ...(input.description ? { description: input.description } : {}) }));
@@ -156,7 +156,7 @@ export async function buildApp(options: BuildOptions = {}): Promise<FastifyInsta
     const evaluations = await repository.listEvaluations(id);
     return { interviewId: id, averageScore: averageScore(evaluations.map((item) => item.score)), evaluations };
   });
-  app.get('/audit', { preHandler: authorize('audit:read') }, async () => repository.listAudit());
+  app.get('/audit', { config: { rateLimit: { max: 120, timeWindow: '1 minute' } }, preHandler: authorize('audit:read') }, async () => repository.listAudit());
 
   if (options.enableTestFixtures ?? process.env.ENABLE_TEST_FIXTURES === 'true') {
     app.get('/__fixtures__/slow', { schema: { hide: true } }, async (request) => {
