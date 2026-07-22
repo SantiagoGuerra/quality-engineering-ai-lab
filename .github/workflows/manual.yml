@@ -49,6 +49,7 @@ jobs:
       QA_SEED: ${{ inputs.seed }}
       JIRA_ISSUE_KEY: ${{ inputs.jira_issue }}
       JIRA_ENABLED: 'false'
+      PLAYWRIGHT_EXTERNAL_SERVER: 'true'
     steps:
       - uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
         with: { egress-policy: audit }
