@@ -4,6 +4,7 @@ import { CandidateInputSchema, averageScore, can, normalizeEmail, pageOffset, ro
 import { MemoryTalentRepository } from '@talent-lab/database';
 
 const runs = process.env.CI ? 1_000 : 250;
+fc.configureGlobal({ seed: Number(process.env.FC_SEED ?? 20260721) });
 
 describe('generative domain invariants', () => {
   it('normalizing an email is idempotent and removes surrounding whitespace', () => {

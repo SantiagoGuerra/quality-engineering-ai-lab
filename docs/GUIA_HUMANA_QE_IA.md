@@ -55,6 +55,8 @@ En equipos pequeños una persona puede ocupar varios roles. Lo importante es con
 
 Los jobs que ejecutan el código del PR sólo tienen permiso de lectura. Únicamente el job final puede escribir el comentario y, antes de hacerlo, usa el script de la revisión base. Los PRs provenientes de forks no reciben permiso de comentario.
 
+`QA_SEED` nombra el escenario de datos (`default`, `empty-state`, etc.); `FC_SEED` reproduce los casos generativos y vale `20260721` en CI. Dependabot recibe un token de sólo lectura: para sus PRs el resumen se guarda como artifact en vez de intentar escribir un comentario.
+
 ### Main: cobertura expandida
 
 Después de integrar se ejecutan navegadores adicionales, integración real, suite E2E completa, visuales Linux, fuzzing OpenAPI y DAST. Su objetivo es detectar interacciones más costosas sin volver lento cada ciclo de desarrollo.
