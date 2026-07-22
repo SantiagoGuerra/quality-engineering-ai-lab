@@ -12,6 +12,13 @@ ZAP_ACTIVE=true pnpm test:dast  # sólo entorno local aislado
 
 El gate bloquea secretos, SAST y vulnerabilidades críticas del inventario actual. Checkov es señal no bloqueante hasta tener baseline triageado. Una vulnerabilidad nueva debe compararse con el SBOM/report anterior; no se acepta una excepción sin owner, riesgo, issue y vencimiento.
 
+## Reporte privado de vulnerabilidades
+
+No abras un issue público para una vulnerabilidad no corregida. Usa el formulario de
+[reporte privado de seguridad](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/security/advisories/new)
+para compartir impacto, reproducción mínima y una mitigación sugerida. GitHub mantendrá
+la conversación y el borrador del aviso visibles sólo para el reportante y los maintainers.
+
 ## Reglas operativas
 
 - Nunca ejecutes ZAP activo, Nuclei ni cargas contra terceros/producción.

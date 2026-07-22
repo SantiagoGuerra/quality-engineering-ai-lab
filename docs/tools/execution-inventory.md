@@ -30,7 +30,7 @@ Estado al 2026-07-21. “No instalada” significa que fue evaluada deliberadame
 | WireMock              | No             | No          | No                       | Hold                                    | Ninguno             | Backend       |
 | Toxiproxy             | Sí             | Sí          | Sí                       | 2/2 PASS                                | Main                | Backend       |
 | Semgrep CE            | Sí (container) | Sí          | Sí                       | 76 reglas, 0 final                      | PR                  | Security      |
-| CodeQL                | GitHub         | Sí          | Pendiente de publicación | Workflow fijado por SHA                 | PR/Main             | Security      |
+| CodeQL                | GitHub         | Sí          | Sí                       | Workflow fijado por SHA + Code Scanning | PR/Main             | Security      |
 | Gitleaks              | Sí (container) | Sí          | Sí                       | 0 final; fixture detectada              | PR                  | Security      |
 | TruffleHog            | No             | No          | No                       | Hold                                    | Ninguno             | Security      |
 | Syft                  | Sí (container) | Sí          | Sí                       | CycloneDX + SPDX                        | PR                  | Security      |
@@ -42,11 +42,11 @@ Estado al 2026-07-21. “No instalada” significa que fue evaluada deliberadame
 | k6                    | Sí (container) | Sí          | Sí                       | thresholds PASS                         | Nightly             | Performance   |
 | Artillery             | No             | No          | No                       | Hold                                    | Ninguno             | Performance   |
 | sitespeed.io          | Sí (container) | Sí          | Sí                       | 3 runs, HTML/HAR/video                  | Nightly señal       | Performance   |
-| Dependency Review     | GitHub         | Sí          | Pendiente de publicación | Bloquea High/Critical nuevos            | PR                  | Security      |
-| Dependabot            | GitHub         | Sí          | Pendiente de publicación | pnpm + Actions semanal                  | Automatización      | Platform      |
+| Dependency Review     | GitHub         | Sí          | Sí                       | Bloquea High/Critical nuevos            | PR                  | Security      |
+| Dependabot            | GitHub         | Sí          | Sí                       | pnpm + Actions semanal; alerta corregida | Automatización      | Platform      |
 | actionlint            | Sí (container) | Sí          | Sí                       | workflows PASS                          | PR                  | Platform      |
-| OpenSSF Scorecard     | GitHub         | Sí          | Pendiente de publicación | SARIF + Code Scanning                   | Señal               | Security      |
-| Harden-Runner         | GitHub         | Sí          | Pendiente de publicación | egress audit                            | Todos los workflows | Platform      |
+| OpenSSF Scorecard     | GitHub         | Sí          | Sí                       | SARIF + Code Scanning                   | Señal               | Security      |
+| Harden-Runner         | GitHub         | Sí          | Sí                       | egress audit                            | Todos los workflows | Platform      |
 | Allure                | No             | No          | No                       | Hold                                    | Ninguno             | QA Platform   |
 | ReportPortal          | No             | No          | No                       | Reject                                  | Ninguno             | QA Platform   |
 | OpenReplay            | No             | No          | No                       | Hold por privacidad/operación           | Ninguno             | Privacy       |

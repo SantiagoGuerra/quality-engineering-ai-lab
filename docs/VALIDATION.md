@@ -14,7 +14,7 @@ Ejecución de cierre: 2026-07-21 America/Bogota (2026-07-22 UTC), macOS arm64, N
 | `pnpm test:unit`                 |     PASS, 20/20 |                    <1 s | incluye render e idempotencia del comentario GitHub                                                    | JUnit, JSON, coverage HTML                  |
 | `pnpm test:components`           |            PASS |                    <1 s | teclado, estados y axe                                                                                 | JUnit/JSON                                  |
 | `pnpm test:integration`          |       PASS, 1/1 |                  ~5.2 s | PostgreSQL real levantado/limpiado por Testcontainers                                                  | JUnit/JSON                                  |
-| `pnpm test:api`                  |       PASS, 6/6 |                  ~2.2 s | se añadió regresión para mapear validación Fastify a 400                                               | JUnit/JSON                                  |
+| `pnpm test:api`                  |       PASS, 7/7 |                  ~2.2 s | incluye validación Fastify a 400 y rate limiting de login a 429                                        | JUnit/JSON                                  |
 | `pnpm test:e2e:smoke`            |       PASS, 4/4 |                   4.4 s | sin retries                                                                                            | Playwright HTML/JUnit/JSON                  |
 | `pnpm test:a11y`                 |       PASS, 3/3 |                    ~4 s | producto con 0 violaciones; fixture rota detectada                                                     | Playwright + `axe/intentional-fixture.json` |
 | `pnpm test:property`             |       PASS, 7/7 |                    <1 s | caso deliberado reducido y retirado                                                                    | JUnit/JSON                                  |
@@ -57,6 +57,8 @@ La protección de `main` se verificó mediante la API de GitHub con estas reglas
 
 La alerta Dependabot de `uuid` quedó en estado `fixed` el 22 de julio de 2026 mediante el override a `11.1.1`. Los PRs publican un único comentario idempotente con el estado de los cuatro gates, commit, seed, ejecución y las 34 herramientas; los jobs que ejecutan el código propuesto conservan permisos de sólo lectura.
 
+CodeQL identificó cuatro hallazgos accionables durante el cierre: tres rutas sin rate limiting y una fixture con espera derivada del request. Se añadió un límite global, un límite más estricto para login, respuesta estable 429 y una lista cerrada de demoras sintéticas. Scorecard motivó fijar por digest todas las imágenes base, habilitar reportes privados y enlazar el formulario desde `SECURITY.md`. Sus señales por antigüedad menor a 90 días, ausencia todavía de diez changesets aprobados y falta de badge CII se conservan como contexto histórico; no se descartaron como falsos positivos.
+
 ## Correcciones derivadas de las ejecuciones
 
 - Puertos Compose inválidos al derivarlos: se limitó el rango y `qa:setup` quedó verde.
@@ -67,6 +69,9 @@ La alerta Dependabot de `uuid` quedó en estado `fixed` el 22 de julio de 2026 m
 - Pa11y objetó el propósito del campo email: se corrigió el autocomplete.
 - Lighthouse tenía un preset demasiado amplio: se definieron categorías y budgets del laboratorio.
 - ZAP encontró headers ausentes: nginx ahora aplica CSP, anti-clickjacking, nosniff, referrer/permissions y aislamiento.
+- ZAP podía terminar verde aunque su usuario no-root no escribiera HTML/JSON/Markdown: el directorio generado tiene acceso acotado y el gate exige los tres archivos no vacíos.
+- CodeQL detectó rutas sin rate limiting y una espera sintética controlable: Fastify limita globalmente y en login, mientras la fixture acepta sólo demoras predefinidas.
+- Scorecard detectó imágenes base sin digest y una política sin canal enlazado: las cuatro etapas Docker quedaron inmutables y el reporte privado de GitHub está habilitado y documentado.
 - Semgrep/Gitleaks/Syft tenían mounts o exclusiones incorrectas: se ajustaron sin silenciar código fuente.
 - Grype encontró dos High transitivos de `tmp` en Lighthouse CI: override a `0.2.7`; `qs` se actualizó a `6.15.2`.
 - El primer contenedor de golden tests persistía cuatro JWT sintéticos bajo `artifacts/auth-linux`: Gitleaks los detectó, los archivos se eliminaron y el estado ahora vive sólo dentro del contenedor efímero.

@@ -28,6 +28,15 @@ describe('Talent API', () => {
     expect(response.statusCode).toBe(401); expect(response.json().error.code).toBe('UNAUTHENTICATED');
   });
 
+  it('rate limits repeated login attempts with a stable API error', async () => {
+    let response = await app.inject({ method: 'POST', url: '/auth/login', payload: { email: 'recruiter@talent.test', password: 'not-correct' } });
+    for (let attempt = 1; attempt <= 10; attempt += 1) {
+      response = await app.inject({ method: 'POST', url: '/auth/login', payload: { email: 'recruiter@talent.test', password: 'not-correct' } });
+    }
+    expect(response.statusCode).toBe(429);
+    expect(response.json().error.code).toBe('RATE_LIMITED');
+  });
+
   it('creates, lists and idempotently replays a candidate', async () => {
     const token = await login(); const payload = { email: 'new.person@example.test', firstName: 'New', lastName: 'Person', location: 'Remote' };
     const first = await app.inject({ method: 'POST', url: '/candidates', headers: { authorization: `Bearer ${token}`, 'idempotency-key': 'candidate-001' }, payload });

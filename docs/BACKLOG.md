@@ -8,7 +8,7 @@ No hay fallas deliberadas activas. Este backlog registra mejoras, no excepciones
 | P1 | Revisar los Medium transitivos de `uuid` en herramientas dev; actualizar Lighthouse/Testcontainers o adoptar override sólo tras compatibilidad verificada | Security + DevEx | DoS sólo en tooling, no bundle/runtime del producto |
 | P1 | Ejecutar checklist manual WCAG con VoiceOver y NVDA en un release candidate y conservar acta humana | Accessibility | automatización no cubre experiencia AT |
 | P1 | Añadir autenticación/contexto a ZAP para rutas protegidas y mantener active scan únicamente en ambiente local efímero | Security + QA | baseline actual observa principalmente superficie pública |
-| P1 | Ejecutar los cuatro workflows en un repositorio GitHub real y proteger ramas con los checks requeridos | DevSecOps | configuración validada localmente, no observada en runner remoto |
+| P2 | Revisar Scorecard al cumplir 90 días y diez changesets aprobados; solicitar badge CII sólo si el laboratorio se convierte en proyecto mantenido | Security + Maintainers | tres señales contextuales propias de un repositorio recién creado |
 | P2 | Completar schemas OpenAPI de respuesta y stateful links para aumentar alcance de Schemathesis | Backend | warnings de auth/test data reducen exploración |
 | P2 | Separar dependencias de runtime/dev en la imagen API y mejorar capas Docker copiando manifests antes del código | DevEx | imagen y rebuild mayores de lo necesario |
 | P2 | Definir SLOs reales con producto/operaciones y sustituir budgets de laboratorio para k6/Lighthouse/sitespeed | Performance | thresholds actuales sólo prueban el arnés |
