@@ -23,7 +23,7 @@ Estado al 2026-07-21. “No instalada” significa que fue evaluada deliberadame
 | BackstopJS            | No             | No          | No                       | Reject                                  | Ninguno             | QA            |
 | Hurl                  | Sí             | Sí          | Sí                       | 9/9 requests                            | PR                  | API           |
 | Bruno CLI             | No             | No          | No                       | Hold                                    | Ninguno             | API           |
-| Schemathesis          | Sí (`uvx`)     | Sí          | Sí                       | 270/270                                 | Main                | API           |
+| Schemathesis          | Sí (`uvx`)     | Sí          | Sí                       | 280/280, seed `20260721`                | Main                | API           |
 | Pact                  | No             | No          | No                       | Hold hasta separar releases             | Ninguno             | Architecture  |
 | Testcontainers        | Sí             | Sí          | Sí                       | PostgreSQL 1/1 PASS                     | Main                | Backend       |
 | MSW                   | Sí             | Sí          | Sí                       | handlers importados/testeados           | PR                  | Frontend      |
