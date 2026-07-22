@@ -2,14 +2,21 @@
 set -euo pipefail
 mkdir -p reports/generated/hurl
 
+docker_host="host.docker.internal"
+docker_network=(--add-host host.docker.internal:host-gateway)
+if [[ "$(uname -s)" == "Linux" ]]; then
+  docker_host="127.0.0.1"
+  docker_network=(--network host)
+fi
+
 if docker image inspect ghcr.io/orange-opensource/hurl:8.0.1 >/dev/null 2>&1 || docker pull ghcr.io/orange-opensource/hurl:8.0.1; then
   docker run --rm \
-    --add-host host.docker.internal:host-gateway \
+    "${docker_network[@]}" \
     --volume "$PWD/tests/api/hurl:/tests:ro" \
     --volume "$PWD/reports/generated/hurl:/reports" \
     ghcr.io/orange-opensource/hurl:8.0.1 \
     --test --report-html /reports \
-    --variable host=host.docker.internal \
+    --variable host="$docker_host" \
     --variable api_port="${API_PORT:-3001}" \
     /tests/smoke.hurl
   exit 0
