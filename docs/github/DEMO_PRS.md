@@ -21,10 +21,10 @@ Estos PRs se conservan abiertos para explicar el flujo. Sus títulos dicen expl�
 
 Los resultados se observaron en GitHub Actions el 22 de julio de 2026, no se infirieron a partir de una ejecución local:
 
-- [PR #9, ejecución verde](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/actions/runs/29892599586): Static, Runtime, Security, Dependency Review, Quality Summary y CodeQL pasaron.
-- [PR #10, ejecución verde](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/actions/runs/29892599342): la nueva propiedad generativa pasó con seed reproducible; todos los gates pasaron.
-- [PR #11, ejecución roja unitaria](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/actions/runs/29892599647): `Static quality` reportó exactamente `expected 3 to be 4`; Runtime, Security, Dependency Review, Quality Summary y CodeQL pasaron.
-- [PR #12, ejecución roja visual](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/actions/runs/29892599526): Hurl pasó 9/9 y seis estados visuales siguieron verdes; sólo los goldens de login desktop y móvil fallaron por el desplazamiento controlado de 24 px.
+- [PR #9, ejecución verde](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/actions/runs/29893266387): Static, Runtime, Security, Dependency Review, Quality Summary y CodeQL pasaron.
+- [PR #10, ejecución verde](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/actions/runs/29893266167): la nueva propiedad generativa pasó con seed reproducible; todos los gates pasaron.
+- [PR #11, ejecución roja unitaria](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/actions/runs/29893266261): `Static quality` reportó exactamente `expected 3 to be 4`; Runtime, Security, Dependency Review, Quality Summary y CodeQL pasaron.
+- [PR #12, ejecución roja visual](https://github.com/SantiagoGuerra/quality-engineering-ai-lab/actions/runs/29893266280): Hurl pasó 9/9 y seis estados visuales siguieron verdes; sólo los goldens de login desktop y móvil fallaron por el desplazamiento controlado de 24 px.
 
 El artifact `pr-12-runtime` conserva el reporte HTML y, con la configuración actual, también `test-results-linux/` con los PNG `expected`, `actual` y `diff`, el screenshot de fallo, `video.webm` y `trace.zip`. Playwright repitió ambos fallos una vez y obtuvo la misma diferencia, por lo que la demo no depende de un fallo intermitente.
 
