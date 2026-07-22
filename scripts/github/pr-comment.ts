@@ -148,7 +148,7 @@ async function main(): Promise<void> {
     runId: process.env.GITHUB_RUN_ID ?? 'local',
     sha: process.env.GITHUB_SHA ?? 'local',
     actor: process.env.GITHUB_ACTOR ?? 'local-developer',
-    seed: process.env.QA_SEED ?? '20260721',
+    seed: process.env.FC_SEED ?? process.env.QA_SEED ?? '20260721',
     results: {
       'Static quality': normalizeResult(process.env.STATIC_RESULT ?? 'success'),
       'Runtime quality': normalizeResult(process.env.RUNTIME_RESULT ?? 'success'),
