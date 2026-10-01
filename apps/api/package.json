@@ -21,7 +21,7 @@
     "@talent-lab/contracts": "workspace:*",
     "@talent-lab/database": "workspace:*",
     "fastify": "5.10.0",
-    "nodemailer": "9.0.3",
+    "nodemailer": "10.0.9",
     "pg": "8.22.0",
     "zod": "4.4.3"
   },
